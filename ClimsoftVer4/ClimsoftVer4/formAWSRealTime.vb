@@ -611,17 +611,22 @@ Err:
     End Sub
 
     Sub FillList(ByRef lst As ComboBox, tbl As String, lstfld As String)
-        Dim dlst As MySql.Data.MySqlClient.MySqlDataAdapter
-        Dim dstn As New DataSet
-        Dim sql As String
-        sql = "SELECT * FROM  " & tbl
-        dlst = New MySql.Data.MySqlClient.MySqlDataAdapter(sql, dbconn)
-        dstn.Clear()
-        dlst.Fill(dstn, tbl)
-        lst.Items.Clear()
-        For i = 0 To dstn.Tables(tbl).Rows.Count - 1
-            lst.Items.Add(dstn.Tables(tbl).Rows(i).Item(lstfld))
-        Next
+        Try
+            Dim dlst As MySql.Data.MySqlClient.MySqlDataAdapter
+            Dim dstn As New DataSet
+            Dim sql As String
+            sql = "SELECT * FROM  " & tbl
+            dlst = New MySql.Data.MySqlClient.MySqlDataAdapter(sql, dbconn)
+            dstn.Clear()
+            dlst.Fill(dstn, tbl)
+            lst.Items.Clear()
+            For i = 0 To dstn.Tables(tbl).Rows.Count - 1
+                lst.Items.Add(dstn.Tables(tbl).Rows(i).Item(lstfld))
+            Next
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
     End Sub
 
     Private Sub cmbExistingStructures_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbExistingStructures.SelectedIndexChanged
